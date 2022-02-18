@@ -39,14 +39,16 @@ esp_err_t hello_get_handler(httpd_req_t *req)
 {
     /* on va mettre le fichier la dedans */
     char    *monBuffer;
-    // monBuffer = (char*)calloc(getFileSize("index.html"), sizeof(char));
+    esp_spiffs_err_t result;
 
-    getFileContent("/index.html",&monBuffer);
+    result = getFileContent("/index.html",&monBuffer);
 
     /* Send response with custom headers and body set as the
      * string passed in user context*/
-    httpd_resp_send(req, monBuffer, strlen(monBuffer));
-
+    if(result == ESP_SPIFFS_OK){
+        httpd_resp_send(req, monBuffer, strlen(monBuffer));
+    }
+    ESP_LOGI(TAG, "uri demandee : %s", req->uri);
     free(monBuffer);
 
     return ESP_OK;
@@ -56,14 +58,19 @@ esp_err_t hello_get_handler(httpd_req_t *req)
 esp_err_t spiffs_get_handler(httpd_req_t *req)
 {
     char    *monBuffer;
+    esp_spiffs_err_t result;
 
-    getFileContent(req->uri,&monBuffer);
+    result = getFileContent(req->uri,&monBuffer);   // TODO fix this warning
 
-    ESP_LOGI(TAG, "uri demandee : %s", req->uri);
-    /* Send response with custom headers and body set as the
-     * string passed in user context*/
-    // const char* resp_str = (const char*) req->user_ctx;
-    httpd_resp_send(req, monBuffer, strlen(monBuffer));
+    if(result == ESP_SPIFFS_OK){
+        httpd_resp_send(req, monBuffer, strlen(monBuffer));
+    }else{
+        // TODO renvoyer une page d'erreur 404
+        const char* resp_str = (const char*) req->user_ctx;
+        httpd_resp_send(req, resp_str, strlen(resp_str));
+    }
+
+    /* free the memory */
     free(monBuffer);
 
     return ESP_OK;

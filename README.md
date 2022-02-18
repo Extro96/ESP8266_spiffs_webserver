@@ -107,6 +107,6 @@ static httpd_uri_t* httpd_find_uri_handler2(httpd_err_resp_t *err,
 
 - [ ] Adding an ifdef around the added function in order to disable the modification if the spiffs isn't defined/used.
 - [ ] Adding the 404 response if no file is found.
-- [ ] Make the getFile from spiffs more robust.
+- [x] Make the getFile from spiffs more robust.
 - [ ] Adding more myme type.
 - [ ] Redirect to `/index.html` if no uri referred.

@@ -16,21 +16,25 @@ void getSpiffsPath(char *fileName, char **path){
     sprintf(*path, "/spiffs%s",fileName);
 }
 
-void getFileContent(char file_name[], char **buffer){
+esp_spiffs_err_t getFileContent(char file_name[], char **buffer){
     /* declare a file pointer */
     FILE    *infile;
     char    *path;
 
+    /* get the path relative to the spiffs */
     getSpiffsPath(file_name, &path);
+
     /* open an existing file for reading */
     infile = fopen(path, "r");
     
+    /* free the memory */
     free(path);
 
     /* quit if the file does not exist */
-    if(infile == NULL)
-        ESP_LOGI(TAG, "fichier null");
-    
+    if(infile == NULL){
+        ESP_LOGI(TAG, "The file : %s doesn't exist", file_name);
+        return ESP_SPIFFS_NO_FILE;
+    }
     /* Get the number of bytes */
     fseek(infile, 0L, SEEK_END);
     
@@ -40,22 +44,25 @@ void getFileContent(char file_name[], char **buffer){
     
     /* grab sufficient memory for the 
     buffer to hold the text */
-    *buffer = (char*)calloc(getFileSize(file_name), sizeof(char));	
-    // *buffer = malloc(getFileSize(file_name));
+    *buffer = (char*)calloc(getFileSize(file_name), sizeof(char));
     
     /* memory error */
-    if(*buffer == NULL)
-        ESP_LOGI(TAG, "buffer null");
-    
+    if(*buffer == NULL){
+        ESP_LOGI(TAG, "Memory error");
+        return ESP_SPIFSS_MEMORY_ERROR;
+    }
+
     /* copy all the text into the buffer */
     fread(*buffer, sizeof(char), getFileSize(file_name), infile);
     fclose(infile);
+    return ESP_SPIFFS_OK;
 }
 
 long int getFileSize(char file_name[])
 {
     char    *path;
 
+    /* get the path relative to the spiffs */
     getSpiffsPath(file_name, &path);
 
     // opening the file in read mode
@@ -65,7 +72,7 @@ long int getFileSize(char file_name[])
   
     // checking if the file exist or not
     if (fp == NULL) {
-        printf("File Not Found!\n");
+        ESP_LOGI(TAG, "The file : %s doesn't exist", file_name);
         return -1;
     }
   

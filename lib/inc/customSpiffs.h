@@ -3,6 +3,15 @@
 
 #include "esp_spiffs.h"
 
+typedef enum{
+    /* Everything went fine. */
+    ESP_SPIFFS_OK = 0,
+    /* File was not found. */
+    ESP_SPIFFS_NO_FILE,
+    /* Memory error. */
+    ESP_SPIFSS_MEMORY_ERROR
+} esp_spiffs_err_t;
+
 void startSpiffs(void);
 
 void stopSpiffs(void);
@@ -11,6 +20,6 @@ void getSpiffsPath(char *path, char **buffer);
 
 long int getFileSize(char file_name[]);
 
-void getFileContent(char file_name[], char **buffer);
+esp_spiffs_err_t getFileContent(char file_name[], char **buffer);
 
 #endif /* ! _CUSTOM_SPIFFS_H_ */
