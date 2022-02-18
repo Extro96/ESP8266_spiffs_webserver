@@ -126,3 +126,18 @@ void stopSpiffs(){
     esp_vfs_spiffs_unregister(NULL);
     ESP_LOGI(TAG, "SPIFFS unmounted");
 }
+
+char* getContentType(char file_name[]){
+    const char *dot = strrchr(file_name, '.');
+    if(!dot || dot == file_name) return NULL;   // No file extension found
+    if(strcmp(dot,".html") == 0)return "text/html";
+    else if(strcmp(dot,".htm") == 0) return "text/html";
+    else if(strcmp(dot,".ico") == 0) return "image/x-icon";
+    else if(strcmp(dot,".css") == 0) return "text/css";
+    else if(strcmp(dot,".js") == 0) return "application/javascript";
+    else if(strcmp(dot,".png") == 0) return "image/png";
+    else if(strcmp(dot,".gif") == 0) return "image/gif";
+    else if(strcmp(dot,".jpg") == 0) return "image/jpeg";
+    
+    return "text/plain";
+}

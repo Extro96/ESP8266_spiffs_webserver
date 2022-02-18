@@ -6,8 +6,6 @@
    CONDITIONS OF ANY KIND, either express or implied.
 */
 
-#define SPIFFS_WEBPAGE
-
 #include <sys/param.h>
 #include <stdio.h>
 #include <string.h>
@@ -41,12 +39,12 @@ esp_err_t hello_get_handler(httpd_req_t *req)
     char    *monBuffer;
     esp_spiffs_err_t result;
 
-    result = getFileContent("/index.html",&monBuffer);
+    result = getFileContent("/index.html", &monBuffer);
 
     /* Send response with custom headers and body set as the
      * string passed in user context*/
     if(result == ESP_SPIFFS_OK){
-        httpd_resp_send(req, monBuffer, strlen(monBuffer));
+        httpd_resp_send(req, monBuffer,getFileSize("/index.html"));
     }
     ESP_LOGI(TAG, "uri demandee : %s", req->uri);
     free(monBuffer);
@@ -60,10 +58,14 @@ esp_err_t spiffs_get_handler(httpd_req_t *req)
     char    *monBuffer;
     esp_spiffs_err_t result;
 
-    result = getFileContent(req->uri,&monBuffer);   // TODO fix this warning
+    result = getFileContent((char *)req->uri, &monBuffer);
+
+    ESP_LOGI(TAG, "uri demandee : %s", req->uri);
 
     if(result == ESP_SPIFFS_OK){
-        httpd_resp_send(req, monBuffer, strlen(monBuffer));
+        char* contentType = getContentType((char *)req->uri);
+        httpd_resp_set_type(req, contentType);
+        httpd_resp_send(req, monBuffer, getFileSize((char *)req->uri));
     }else{
         // TODO renvoyer une page d'erreur 404
         const char* resp_str = (const char*) req->user_ctx;
