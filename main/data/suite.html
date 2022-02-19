@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <title>voici la suite</title>
+  </head>
+  <body>
+    <p>et voila autre chose encore</p>
+    
+    <button type="button" onmousedown="mouseDown()" onmouseup="mouseUp()">Toggle LED</button> 
+    
+  </body>
+</html>
+
+<script>
+function proceed () {
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/LED", true);
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+  xhr.send();
+  }
+  
+  function mouseDown() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/LED", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+    xhr.send();
+  }
+        
+	function mouseUp() {
+		var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/LED", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+    xhr.send();
+	}
+</script>

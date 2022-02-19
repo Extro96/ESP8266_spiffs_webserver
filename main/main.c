@@ -62,11 +62,16 @@ esp_err_t spiffs_get_handler(httpd_req_t *req)
 
     ESP_LOGI(TAG, "uri demandee : %s", req->uri);
 
-    if(result == ESP_SPIFFS_OK){
+    if(result == ESP_SPIFFS_OK){                                            // If the uri match with a file
         char* contentType = getContentType((char *)req->uri);
         httpd_resp_set_type(req, contentType);
         httpd_resp_send(req, monBuffer, getFileSize((char *)req->uri));
-    }else{
+    }else if(strcmp(req->uri,"/") == 0){                                    // If no uri, send index.html
+        result = getFileContent("/index.html", &monBuffer);
+        if(result == ESP_SPIFFS_OK){
+            httpd_resp_send(req, monBuffer,getFileSize("/index.html"));
+        }
+    }else{                                                                  // If the resqueted uri doesn't refer to a file
         // TODO renvoyer une page d'erreur 404
         const char* resp_str = (const char*) req->user_ctx;
         httpd_resp_send(req, resp_str, strlen(resp_str));
