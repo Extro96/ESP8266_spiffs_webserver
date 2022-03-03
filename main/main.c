@@ -16,6 +16,7 @@
 #include "esp_log.h"
 #include "esp_spiffs.h"
 #include "customSpiffs.h"
+#include "customSocket.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -162,6 +163,8 @@ void app_main(void)
 
     ESP_ERROR_CHECK(esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP, &connect_handler, &server));
     ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, WIFI_EVENT_STA_DISCONNECTED, &disconnect_handler, &server));
+
+    startSocket();
 
     server = start_webserver();
 

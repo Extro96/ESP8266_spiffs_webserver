@@ -1,5 +1,6 @@
 set(COMPONENT_SRCS  "main.c" 
                     "../lib/src/customSpiffs.c"
+                    "../lib/src/customSocket.c"
                     )
 
 set(COMPONENT_ADD_INCLUDEDIRS   "." 

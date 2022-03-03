@@ -89,12 +89,11 @@ static httpd_uri_t* httpd_find_uri_handler2(httpd_err_resp_t *err,
                  * error is to be neglected */
                 *err = HTTPD_405_METHOD_NOT_ALLOWED;
             }
-        }
-    }
-    for (int i = 0; i < hd->config.max_uri_handlers; i++) {
-        if (hd->hd_calls[i]) {
-            if((strcmp(hd->hd_calls[i]->uri, "/*") == 0) && hd->hd_calls[i]->method == method){
-                return hd->hd_calls[i];
+            if(strcmp(hd->hd_calls[i]->uri, "/*") == 0){ // If the "/*" uri is define
+                if(hd->hd_calls[i]->method == method){
+                    return hd->hd_calls[i];
+                }
+                *err = HTTPD_405_METHOD_NOT_ALLOWED;    // The method is not the good one
             }
         }
     }
@@ -109,4 +108,4 @@ static httpd_uri_t* httpd_find_uri_handler2(httpd_err_resp_t *err,
 - [ ] Adding the 404 response if no file is found.
 - [x] Make the getFile from spiffs more robust.
 - [x] Adding and sending mime type.
-- [ ] Redirect to `/index.html` if no uri referred.
+- [x] Redirect to `/index.html` if no uri referred.
