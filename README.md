@@ -1,9 +1,8 @@
-# ESP8266 RC CAR
+# ESP8266 spiffs webserver
 
 ***This project is intended to be a formation on the ESP8266_RTOS_SDK.***
 
-In this project, we will flash the esp8266 and install it on an old rc car. It will provide an IHM over the wifi to control it through a phone or a computer.
-We will see how to flash the spiffs, control pwm, I/O, use FreeRTOS, websockets, web pages interractions.
+This project is a C conversion of the "A beginner's Guide to the ESP8266" in order to help beginners with the official ESP8266_RTOS_SDK. In this example, we will focus on the spiffs and the websocket part of the tutorial and improve it in a way that everyone connected to the esp can see the value of the led in real time (with websocket).
 
 ## Getting started with the ESP8266_RTOS_SDK
 You need to install and configure the ESP8266_RTOS_SDK before continuing, everything is explain on their [GitHub page](https://github.com/espressif/ESP8266_RTOS_SDK/).
